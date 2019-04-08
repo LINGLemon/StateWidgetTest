@@ -45,16 +45,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  List<Widget> widgets = [];
+  bool toggle = true;
 
-  @override
-  void initState() {
-    for (int i = 0; i < 100; i++) {
-      widgets.add(
-        getRow(i)
-      );
+  // 私有方法和私有变量是加下划线的。
+  _toggle() {
+    setState(() {
+      toggle = toggle?false:true;
+    });
+  }
+  _getToggleChild() {
+    if (toggle) {
+      return Text('Toggle one!');
+    } else {
+      return MaterialButton(onPressed: (){}, child: Text('Toggle two!'),);
     }
-    super.initState();
   }
 
   @override
@@ -71,20 +75,16 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: ListView.builder(
-          itemCount: widgets.length,
-          itemBuilder: (BuildContext context, int position) {
-            return getRow(position);
-          }), // 根据position，动态生成的cell
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: _getToggleChild(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _toggle,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
-  getRow(index) {
-    return GestureDetector(
-      onTap: () {
-        print('you tap $index');
-      },
-      child: Padding(padding: EdgeInsets.all(10), child: Text('Row $index'),),);
-  }
 }
-
